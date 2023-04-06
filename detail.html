@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+
+    <h1>Pokemon</h1>
+    <div>
+        <span></span>
+    </div>
+    <script>
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const numPoke = urlParams.get('pokemon')
+
+        const pokedex = 'https://api-pokemon-fr.vercel.app/api/v1/pokemon/'+numPoke;
+        //const pokemon = JSON.parse(pokedex);
+        
+        const pokemons = [];
+        
+        fetch(pokedex)
+        .then(blob => blob.json())
+        .then(data => pokemons.push(data));
+        //console.log(pokemons);
+        //console.log(pokedex);
+        //document.getElementById("id").innerHTML= pokedexId;
+
+        function trouverPokemon(pokemons){
+            return pokemons.filter(pokemon =>{
+                const regex = new RegExp(recherche,'gi');
+                return pokemon.pokedexId.match(regex);
+            })
+        }
+        function afficherID(){
+            const tabRes = trouverPokemon(pokemons);
+            const html = tabRes.map(pokemon=>{
+                return`
+                <p>${pokemon.pokedexId}</p>
+                `
+            });
+            resultat.innerHTML = html;
+            console.log(tableauResultat);
+            console.log(html);
+        }
+        //
+        const resultat = document.querySelector('span');
+        console.log(pokemons)
+    </script>
+</body>
+</html>

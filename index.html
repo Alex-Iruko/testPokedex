@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokedex</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <form>
+        <h1>Pokedex</h1>
+        <input type="text">
+        <ul></ul>
+    </form>
+
+    <script>
+        
+       // const pokedex = 'https://mon-api-pokemon.vercel.app/api/v1/pokemon';
+        const pokedex = 'https://api-pokemon-fr.vercel.app/api/v1/pokemon';
+
+
+        const pokemons = [];
+        fetch(pokedex)
+        .then(blob => blob.json())
+        .then(data => pokemons.push(...data))
+
+        function trouverPokemon(recherche, pokemons){
+            return pokemons.filter(pokemon =>{
+                const regex = new RegExp(recherche,'gi');
+                return pokemon.name.fr.match(regex);
+            })
+        }
+
+        function afficherResultat(){
+            const tableauResultat = trouverPokemon(this.value, pokemons);
+            const html = tableauResultat.map(pokemon =>{
+                return `
+                <li>
+                    <span>${pokemon.pokedexId}</span>
+                    <img src="${pokemon.sprites.regular}" width="150" height="150">
+                    <img src="${pokemon.sprites.shiny}" width="150" height="150">
+                    
+                    <a href="detail.html?pokemon=${pokemon.pokedexId}">${pokemon.name.fr}</a>
+                </li>
+                `; //<img src="${pokemon.sprite.shiny}" width="150" height="150">
+
+            }).join('');
+            resultat.innerHTML = html;
+            console.log(tableauResultat);
+
+        }
+        const input = document.querySelector('input');
+        const resultat = document.querySelector('ul');
+
+        //input.addEventListener('change',afficherResultat);
+        input.addEventListener('keyup',afficherResultat);
+    </script>
+</body>
+</html>
